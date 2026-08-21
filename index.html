@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Ares Studio de Pilates — movimento, equilíbrio e bem-estar."
+    />
+    <meta property="og:title" content="Ares Studio de Pilates" />
+    <meta
+      property="og:description"
+      content="Movimento, equilíbrio e bem-estar em um estúdio boutique de Pilates."
+    />
+    <meta property="og:type" content="website" />
+    <title>Ares Studio de Pilates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header sticky top-0 z-50">
+      <div class="header-shell mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
+        <a href="#inicio" class="brand-link" aria-label="Ares Studio - início">
+          <span class="logo-mark">
+            <img src="/src/assets/images/logo-header.png" alt="" />
+          </span>
+          <span class="leading-tight">
+            <strong class="font-serif text-xl font-semibold text-[color:var(--ares-text)]">Ares Studio</strong>
+            <span class="block text-xs tracking-[0.08em] text-[color:var(--ares-muted)]">de Pilates</span>
+          </span>
+        </a>
+
+        <nav class="hidden items-center gap-8 text-sm font-medium text-[color:var(--ares-text)] md:flex" aria-label="Navegação principal">
+          <a class="nav-link" href="#inicio">Início</a>
+          <a class="nav-link" href="#sobre">Sobre</a>
+          <a class="nav-link" href="#aulas">Aulas</a>
+          <a class="nav-link" href="#estrutura">Estrutura</a>
+          <a class="nav-link" href="#contato">Contato</a>
+        </nav>
+
+        <div class="header-actions hidden items-center gap-3 md:flex">
+          <span class="business-status" data-business-status aria-live="polite">
+            <span class="business-status-dot" aria-hidden="true"></span>
+            <span data-business-status-label>Fechado</span>
+          </span>
+          <a class="btn btn-secondary" href="https://wa.me/554198814991" target="_blank" rel="noopener noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M7.7 19.2 4 20l.8-3.5a8 8 0 1 1 2.9 2.7Z"></path>
+              <path d="M9.3 8.8c.2 3.3 2.6 5.7 5.9 5.9l1.3-1.3c.2-.2.3-.5.1-.8l-.8-1.4c-.2-.3-.5-.4-.8-.3l-1.4.5a5.4 5.4 0 0 1-2.9-2.9l.5-1.4c.1-.3 0-.6-.3-.8l-1.4-.8c-.3-.2-.6-.1-.8.1L7.4 7c-.2.2-.2.5-.1.8Z"></path>
+            </svg>
+            WhatsApp
+          </a>
+          <a
+            class="social-button"
+            href="https://www.instagram.com/aresstudiodepilates/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Abrir Instagram do Ares Studio em nova aba"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="16" rx="5"></rect>
+              <circle cx="12" cy="12" r="3.5"></circle>
+              <path d="M17.2 6.8h.01"></path>
+            </svg>
+          </a>
+        </div>
+
+        <button class="mobile-toggle md:hidden" type="button" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <nav class="mobile-menu md:hidden" aria-label="Navegação mobile">
+        <a href="#inicio">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#aulas">Aulas</a>
+        <a href="#estrutura">Estrutura</a>
+        <a href="#contato">Contato</a>
+        <div class="mobile-actions grid grid-cols-[1fr_auto] gap-3 pt-2">
+          <span class="business-status col-span-2" data-business-status aria-live="polite">
+            <span class="business-status-dot" aria-hidden="true"></span>
+            <span data-business-status-label>Fechado</span>
+          </span>
+          <a class="btn btn-secondary w-full" href="https://wa.me/554198814991" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a
+            class="social-button"
+            href="https://www.instagram.com/aresstudiodepilates/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Abrir Instagram do Ares Studio em nova aba"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="16" rx="5"></rect>
+              <circle cx="12" cy="12" r="3.5"></circle>
+              <path d="M17.2 6.8h.01"></path>
+            </svg>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="inicio" class="hero-section overflow-hidden">
+        <div class="mx-auto grid max-w-7xl items-center gap-12 px-5 py-10 lg:grid-cols-[0.82fr_1.18fr] lg:px-8 lg:py-0">
+          <div class="hero-copy reveal">
+            <span class="hero-rule" aria-hidden="true"></span>
+            <h1 class="font-serif text-5xl font-semibold leading-[0.94] text-[color:var(--ares-coffee)] sm:text-6xl lg:text-[4.65rem]">
+              Movimento,<br />
+              equilíbrio e<br />
+              bem-estar
+            </h1>
+            <p class="mt-6 max-w-md text-sm leading-7 text-[color:var(--ares-muted)]">
+              Aulas de Pilates personalizadas para fortalecer o corpo, melhorar a postura e transformar sua qualidade de vida.
+            </p>
+            <div class="mt-7 flex flex-wrap gap-3">
+              <a class="btn btn-primary" href="https://wa.me/554198814991" target="_blank" rel="noopener noreferrer">Agende sua aula</a>
+              <a class="btn btn-light" href="#aulas">Conheça as aulas</a>
+            </div>
+          </div>
+
+          <div class="hero-carousel reveal" data-carousel data-parallax="0.045" aria-label="Ambientes do Ares Studio">
+            <div class="carousel-stage">
+              <div class="carousel-depth" aria-hidden="true">
+                <div class="carousel-depth-slide" data-depth-slide>
+                  <img src="/src/assets/images/hero/hero-01.png" alt="" />
+                </div>
+                <div class="carousel-depth-slide" data-depth-slide>
+                  <img src="/src/assets/images/hero/hero-02.png" alt="" />
+                </div>
+                <div class="carousel-depth-slide" data-depth-slide>
+                  <img src="/src/assets/images/hero/hero-03.png" alt="" />
+                </div>
+                <div class="carousel-depth-slide" data-depth-slide>
+                  <img src="/src/assets/images/hero/hero-04.png" alt="" />
+                </div>
+              </div>
+              <div class="carousel-viewport">
+                <div class="carousel-track" data-carousel-track>
+                  <article class="carousel-slide" data-slide data-clone="last">
+                    <img src="/src/assets/images/hero/hero-04.png" alt="" />
+                  </article>
+                  <article class="carousel-slide" data-slide>
+                    <img src="/src/assets/images/hero/hero-01.png" alt="Sala principal com aparelhos de Pilates" />
+                  </article>
+                  <article class="carousel-slide" data-slide>
+                    <img src="/src/assets/images/hero/hero-02.png" alt="Ambiente iluminado do Ares Studio" />
+                  </article>
+                  <article class="carousel-slide" data-slide>
+                    <img src="/src/assets/images/hero/hero-03.png" alt="Detalhe de aula de Pilates no aparelho" />
+                  </article>
+                  <article class="carousel-slide" data-slide>
+                    <img src="/src/assets/images/hero/hero-04.png" alt="Equipamentos e estrutura do estúdio" />
+                  </article>
+                  <article class="carousel-slide" data-slide data-clone="first">
+                    <img src="/src/assets/images/hero/hero-01.png" alt="" />
+                  </article>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-controls">
+              <button class="carousel-arrow" type="button" data-carousel-prev aria-label="Slide anterior">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+              </button>
+              <div class="carousel-dots" aria-label="Selecionar slide">
+                <button type="button" class="is-active" data-carousel-dot aria-label="Mostrar slide 1"></button>
+                <button type="button" data-carousel-dot aria-label="Mostrar slide 2"></button>
+                <button type="button" data-carousel-dot aria-label="Mostrar slide 3"></button>
+                <button type="button" data-carousel-dot aria-label="Mostrar slide 4"></button>
+              </div>
+              <button class="carousel-arrow" type="button" data-carousel-next aria-label="Próximo slide">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="features-bar" aria-label="Diferenciais do Ares Studio">
+        <div class="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-5 py-6 lg:grid-cols-4 lg:px-8">
+          <article class="feature-item reveal">
+            <span class="feature-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path><path d="M4.5 20a7.5 7.5 0 0 1 15 0"></path><path d="m18.5 4.5.6 1.3 1.4.6-1.4.6-.6 1.3-.6-1.3-1.4-.6 1.4-.6.6-1.3Z"></path></svg></span>
+            <p>Atendimento personalizado</p>
+          </article>
+          <article class="feature-item reveal">
+            <span class="feature-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 14.7 8l5.3.9-3.8 3.9.8 5.4-5-2.5-5 2.5.8-5.4L4 8.9 9.3 8 12 3Z"></path><path d="M8.5 21 12 16.5 15.5 21"></path></svg></span>
+            <p>Instrutores qualificados</p>
+          </article>
+          <article class="feature-item reveal">
+            <span class="feature-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7v5l3.2 2"></path></svg></span>
+            <p>Horários flexíveis</p>
+          </article>
+          <article class="feature-item reveal">
+            <span class="feature-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.2V20H4v-8.8"></path><path d="m3 12 9-8 9 8"></path><path d="M8.5 13.5C8.5 11.6 10 10 12 10s3.5 1.6 3.5 3.5c0 2.8-3.5 4.8-3.5 4.8s-3.5-2-3.5-4.8Z"></path></svg></span>
+            <p>Ambiente acolhedor e exclusivo</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="sobre" class="section-light">
+        <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <div class="reveal">
+            <p class="section-kicker">Sobre</p>
+            <h2 class="section-title">Sobre o Ares Studio</h2>
+            <p class="mt-4 max-w-lg text-sm leading-7 text-[color:var(--ares-muted)]">
+              O Ares Studio de Pilates nasce com o propósito de oferecer uma experiência completa de bem-estar.
+            </p>
+            <p class="mt-3 max-w-lg text-sm leading-7 text-[color:var(--ares-muted)]">
+              Unimos técnica, atenção aos detalhes e um ambiente acolhedor para que você se sinta bem desde o primeiro dia.
+            </p>
+            <a class="btn btn-secondary mt-6 inline-flex" href="#estrutura">Saiba mais sobre nós</a>
+          </div>
+
+          <div id="estrutura" class="studio-photo reveal" data-parallax="0.035">
+            <img src="/src/assets/images/studio/studio-about.png" alt="Recepção e sala de Pilates do Ares Studio" />
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits-section">
+        <div class="mx-auto max-w-6xl px-5 py-8 lg:px-8">
+          <h2 class="text-center font-serif text-3xl font-semibold text-[color:var(--ares-text)]">Benefícios do Pilates</h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <article class="benefit reveal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v16"></path><path d="M7 8c2 1.2 3.7 1.2 5 0 1.3 1.2 3 1.2 5 0"></path><path d="M8 16c1.5-1.1 2.8-1.1 4 0 1.2-1.1 2.5-1.1 4 0"></path></svg>Melhora da postura</article>
+            <article class="benefit reveal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 14V9"></path><path d="M18 14V9"></path><path d="M3.5 12h17"></path><path d="M8 16V7"></path><path d="M16 16V7"></path></svg>Fortalecimento muscular</article>
+            <article class="benefit reveal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 13c3-3 5 3 8 0s5-3 6-1"></path><path d="M7 17c2-2 4 1.5 6 0 2-1.6 3-2 4-1"></path><path d="M9 7c1-2 5-2 6 0"></path></svg>Alívio do estresse</article>
+            <article class="benefit reveal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h16"></path><path d="m15 7 5 5-5 5"></path><path d="m9 7-5 5 5 5"></path></svg>Mais mobilidade e flexibilidade</article>
+            <article class="benefit reveal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.2-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.8-7 10-7 10Z"></path></svg>Bem-estar físico e mental</article>
+          </div>
+        </div>
+      </section>
+
+      <section id="aulas" class="classes-section">
+        <div class="mx-auto max-w-6xl px-5 py-12 lg:px-8">
+          <h2 class="text-center font-serif text-3xl font-semibold text-[color:var(--ares-text)]">Nossas Aulas</h2>
+          <div class="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <article class="class-card reveal">
+              <img src="/src/assets/images/classes/aparelhos.png" alt="Aula de Pilates no aparelho" />
+              <div>
+                <h3>Pilates no Aparelho</h3>
+                <p>Técnica completa e personalizada com foco em força, postura e consciência corporal.</p>
+                <a href="#contato">Saiba mais</a>
+              </div>
+            </article>
+            <article class="class-card reveal">
+              <img src="/src/assets/images/classes/solo.png" alt="Aula de Pilates solo" />
+              <div>
+                <h3>Pilates Solo</h3>
+                <p>Exercícios de solo que trabalham alongamento, força e estabilidade de forma eficiente.</p>
+                <a href="#contato">Saiba mais</a>
+              </div>
+            </article>
+            <article class="class-card reveal">
+              <img src="/src/assets/images/classes/duo.png" alt="Aula Duo de Pilates" />
+              <div>
+                <h3>Duo</h3>
+                <p>Aula em dupla com atenção individualizada e um treino dinâmico e motivador.</p>
+                <a href="#contato">Saiba mais</a>
+              </div>
+            </article>
+            <article class="class-card reveal">
+              <img src="/src/assets/images/classes/funcional.png" alt="Aula de funcional integrado" />
+              <div>
+                <h3>Funcional Integrado</h3>
+                <p>Movimentos que combinam Pilates e treino funcional para resultados completos.</p>
+                <a href="#contato">Saiba mais</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonial-strip">
+        <div class="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-7 md:flex-row md:items-center md:justify-between lg:px-8">
+          <blockquote class="reveal">
+            <span aria-hidden="true">“</span>
+            Desde que comecei no Ares, minha postura melhorou, minhas dores diminuíram e eu me sinto muito mais disposta no dia a dia.
+          </blockquote>
+          <div class="testimonial-person reveal">
+            <img src="/src/assets/images/testimonial/aluna.png" alt="Retrato de aluna do Ares Studio" />
+            <p><strong>Aluna M.</strong><span>Aluna do Ares Studio</span></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contato" class="contact-section">
+        <div class="mx-auto grid max-w-6xl gap-8 px-5 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div class="reveal">
+            <h2 class="section-title">Estamos prontos para te receber!</h2>
+            <p class="mt-3 max-w-md text-sm leading-7 text-[color:var(--ares-muted)]">
+              Entre em contato e agende sua aula experimental em um espaço pensado para cuidar de você.
+            </p>
+            <a class="btn btn-primary mt-6" href="https://wa.me/554198814991" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+
+            <div class="contact-details mt-7">
+              <p><strong>Horários de funcionamento</strong><span>Segunda a Sexta: 06:00 - 20:00<br />Sábado: 08:00 - 12:00</span></p>
+              <p><strong>Endereço</strong><span>Avenida Prefeito Erasto Gaertner, 113<br />Curitiba - PR</span></p>
+            </div>
+          </div>
+
+          <div class="map-placeholder reveal" aria-label="Área reservada para futuro mapa">
+            <div class="map-lines"></div>
+            <span class="map-pin">●</span>
+            <p>Shopping Vila Verde</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-7 text-xs sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <p><strong class="font-serif text-base">Ares Studio</strong> © 2026. Todos os direitos reservados.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/aresstudiodepilates/" target="_blank" rel="noopener noreferrer" aria-label="Instagram do Ares Studio">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.5"></circle><path d="M17.2 6.8h.01"></path></svg>
+            Instagram
+          </a>
+          <a href="https://wa.me/554198814991" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp do Ares Studio">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.7 19.2 4 20l.8-3.5a8 8 0 1 1 2.9 2.7Z"></path><path d="M9.3 8.8c.2 3.3 2.6 5.7 5.9 5.9l1.3-1.3c.2-.2.3-.5.1-.8l-.8-1.4c-.2-.3-.5-.4-.8-.3l-1.4.5a5.4 5.4 0 0 1-2.9-2.9l.5-1.4c.1-.3 0-.6-.3-.8l-1.4-.8c-.3-.2-.6-.1-.8.1L7.4 7c-.2.2-.2.5-.1.8Z"></path></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
