@@ -1333,70 +1333,62 @@ html.hero-media-preparing .hero-media {
 
 /* Testimonial styles removed (section deleted). */
 
-.contact-details strong {
-  color: var(--ares-text);
-  font-size: 0.82rem;
+.contact-details {
+  display: grid;
+  gap: 1.4rem;
 }
 
-.map-placeholder {
+.contact-details p {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.contact-details strong {
+  color: var(--ares-text);
+  font-size: 1rem;
+}
+
+.contact-details span {
+  display: block;
+}
+
+.map-card {
   position: relative;
   min-height: 260px;
   overflow: hidden;
   border: 1px solid var(--ares-line);
   border-radius: 8px;
-  background:
-    linear-gradient(33deg, transparent 0 43%, color-mix(in srgb, var(--color-primary-soft) 36%, transparent) 43% 46%, transparent 46%),
-    linear-gradient(145deg, transparent 0 35%, color-mix(in srgb, var(--color-primary) 15%, transparent) 35% 38%, transparent 38%),
-    linear-gradient(0deg, color-mix(in srgb, var(--color-surface) 58%, transparent), color-mix(in srgb, var(--color-surface) 58%, transparent)),
-    var(--color-bg-soft);
+  background: var(--color-bg-soft);
 }
 
-.map-placeholder::after {
+.map-card iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border: 0;
+}
+
+.map-open-link {
   position: absolute;
-  inset: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-border-strong) 34%, transparent);
-  border-radius: 5px;
-  content: "";
-}
-
-.map-lines::before,
-.map-lines::after {
-  position: absolute;
-  background: color-mix(in srgb, var(--color-surface) 86%, transparent);
-  content: "";
-}
-
-.map-lines::before {
-  inset: 24% -10% auto;
-  height: 24px;
-  transform: rotate(-13deg);
-}
-
-.map-lines::after {
-  top: -10%;
-  left: 50%;
-  width: 22px;
-  height: 125%;
-  transform: rotate(18deg);
-}
-
-.map-pin {
-  position: absolute;
-  top: 46%;
-  left: 55%;
-  z-index: 1;
-  color: var(--ares-terracotta);
-  font-size: 1.4rem;
-}
-
-.map-placeholder p {
-  position: absolute;
-  top: calc(46% + 2rem);
-  left: 49%;
-  z-index: 1;
-  color: var(--ares-text);
-  font-size: 0.78rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 42%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  padding: 0.62rem 0.82rem;
+  color: var(--ares-coffee);
+  font-size: 0.72rem;
   font-weight: 700;
+  box-shadow: 0 14px 34px rgba(55, 37, 29, 0.12);
+  transition: border-color 220ms ease, color 220ms ease, transform 220ms ease;
+}
+
+.map-open-link:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 48%, transparent);
+  color: var(--ares-text);
+  transform: translateY(-1px);
 }
 
 .site-footer {
