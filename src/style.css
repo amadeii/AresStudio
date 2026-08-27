@@ -44,6 +44,22 @@
   --white: var(--ares-ivory);
 }
 
+/* Proteções horizontais globais para evitar overflow em mobile */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+
 /* Mobile: aumentar a área de mídia dos cards para melhor enquadramento de vídeos verticais */
 @media (max-width: 767px) {
   .class-card :is(img, video) {
@@ -134,6 +150,32 @@ button:focus-visible {
   transition: box-shadow 180ms ease, background-color 180ms ease;
 }
 
+/* Ensure header never causes horizontal overflow and fits small screens */
+.site-header {
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+.header-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.brand-link {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.header-actions {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
 .site-header.is-scrolled {
   box-shadow: 0 12px 30px color-mix(in srgb, var(--color-text) 8%, transparent);
 }
@@ -146,7 +188,7 @@ button:focus-visible {
 .brand-link {
   display: flex;
   align-items: center;
-  min-width: max-content;
+  min-width: 0;
   gap: 0.78rem;
 }
 
@@ -447,6 +489,36 @@ button:focus-visible {
     padding-right: 0.75rem;
   }
 
+  @media (max-width: 430px) {
+    .header-shell {
+      padding-left: 6px;
+      padding-right: 6px;
+      gap: 6px;
+      height: 60px;
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+    }
+
+    .mobile-social-button,
+    .mobile-toggle {
+      width: 36px;
+      height: 36px;
+    }
+
+    .mobile-status {
+      font-size: 11px;
+      gap: 6px;
+    }
+
+    .brand-link strong {
+      font-size: 0.95rem;
+    }
+  }
+
   .logo-mark {
     width: 56px;
     height: 56px;
@@ -512,17 +584,34 @@ button:focus-visible {
   /* Mobile per-card prepared/active states to animate each card when it enters */
   /* Wrapper slot that stays stable in layout while the actual ARTICLE slides */
   .class-card-slot {
+    position: relative;
     display: block;
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
+    overflow-x: hidden;
   }
 
   .classes-section {
     overflow-x: clip;
   }
 
+  /* Ensure classes section cannot overflow horizontally */
+  .classes-section {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  @supports (overflow: clip) {
+    .classes-section {
+      overflow-x: clip;
+    }
+  }
+
   .class-card-slot > [data-classes-card] {
     opacity: 0;
-    transform: translate3d(calc(100vw + 24px), 0, 0);
+    transform: translate3d(calc(100% + 24px), 0, 0);
     will-change: opacity, transform;
     transition: none;
     transition-delay: 0ms !important;
@@ -1662,6 +1751,8 @@ html.hero-media-preparing .hero-media {
   object-fit: cover;
   transform: scale(1);
   transition: transform 220ms ease;
+  /* fallback visual while video has no frame */
+  background: var(--ares-sand);
 }
 
 @media (min-width: 1024px) {

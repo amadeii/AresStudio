@@ -1101,29 +1101,39 @@ const initViewportVideos = () => {
   const videos = Array.from(document.querySelectorAll("[data-viewport-video]"));
   if (!videos.length || !("IntersectionObserver" in window)) return;
 
-  const playVideo = (video) => {
+  videos.forEach((video) => {
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.dataset.videoState = "paused";
+  });
+
+  const tryPlay = (video) => {
     if (video.dataset.videoState === "playing" || video.dataset.videoState === "pending") return;
-
     video.dataset.videoState = "pending";
-    const playPromise = video.play();
-
-    if (playPromise) {
-      playPromise
+    const promise = video.play();
+    if (promise?.catch) {
+      promise
         .then(() => {
           video.dataset.videoState = "playing";
         })
         .catch(() => {
           video.dataset.videoState = "paused";
+          if (video._retryAttached) return;
+          video._retryAttached = true;
+          const retry = () => {
+            video.play().catch(() => {});
+            video._retryAttached = false;
+          };
+          video.addEventListener("canplay", retry, { once: true });
         });
       return;
     }
-
     video.dataset.videoState = "playing";
   };
 
   const pauseVideo = (video) => {
     if (video.dataset.videoState === "paused") return;
-
     video.pause();
     video.dataset.videoState = "paused";
   };
@@ -1132,21 +1142,33 @@ const initViewportVideos = () => {
     (entries) => {
       entries.forEach((entry) => {
         const video = entry.target;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
+
         if (entry.isIntersecting) {
-          playVideo(video);
+          if (video.dataset.preloadRequested !== "true" && video.readyState < HTMLMediaElement.HAVE_METADATA) {
+            video.dataset.preloadRequested = "true";
+            try {
+              video.load();
+            } catch (e) {
+              // ignore
+            }
+          }
+
+          if (entry.intersectionRatio >= 0.35) {
+            tryPlay(video);
+          }
           return;
         }
 
         pauseVideo(video);
       });
     },
-    { threshold: 0.35 },
+    { rootMargin: "300px 0px", threshold: [0, 0.35] },
   );
 
-  videos.forEach((video) => {
-    video.dataset.videoState = "paused";
-    videoObserver.observe(video);
-  });
+  videos.forEach((video) => videoObserver.observe(video));
 };
 
 const initHeroCarousel = () => {
