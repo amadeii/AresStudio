@@ -339,10 +339,19 @@ button:focus-visible {
 }
 
 .btn svg,
+.btn img,
 .social-button svg,
+.social-button img,
+.footer-socials img,
 .footer-socials svg {
   width: 18px;
   height: 18px;
+  object-fit: contain;
+}
+
+.btn svg,
+.social-button svg,
+.footer-socials svg {
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -363,16 +372,7 @@ button:focus-visible {
 
 .hero-primary-cta {
   display: inline-flex;
-  flex-direction: column;
   align-items: flex-start;
-  gap: 0.55rem;
-}
-
-.hero-cta-note {
-  color: var(--color-primary);
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.2;
 }
 
 .btn-primary {
@@ -1949,6 +1949,11 @@ html.hero-media-preparing .hero-media {
   font-weight: 600;
 }
 
+.developer-signature .developer-name-link {
+  min-height: auto;
+  color: inherit;
+}
+
 .developer-signature a {
   display: inline-flex;
   align-items: center;
@@ -1961,6 +1966,15 @@ html.hero-media-preparing .hero-media {
 .developer-signature a:hover {
   color: var(--color-primary);
   transform: translateY(-1px);
+}
+
+.developer-signature .developer-name-link:hover {
+  transform: none;
+}
+
+.developer-signature a[href*="wa.me"] img {
+  width: 18px;
+  height: 18px;
 }
 
 .developer-signature svg {
@@ -2054,10 +2068,6 @@ html.hero-media-preparing .hero-media {
   .hero-copy {
     padding-left: 0;
     padding-block: 3rem 2rem;
-  }
-
-  .hero-cta-note {
-    order: -1;
   }
 
   .hero-title {
