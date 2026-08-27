@@ -361,6 +361,20 @@ button:focus-visible {
   transform: translateY(-1px);
 }
 
+.hero-primary-cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.hero-cta-note {
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .btn-primary {
   border-color: var(--color-primary);
   background: var(--color-primary);
@@ -2040,6 +2054,10 @@ html.hero-media-preparing .hero-media {
   .hero-copy {
     padding-left: 0;
     padding-block: 3rem 2rem;
+  }
+
+  .hero-cta-note {
+    order: -1;
   }
 
   .hero-title {
