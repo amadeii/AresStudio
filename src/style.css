@@ -44,6 +44,26 @@
   --white: var(--ares-ivory);
 }
 
+/* Mobile: aumentar a área de mídia dos cards para melhor enquadramento de vídeos verticais */
+@media (max-width: 767px) {
+  .class-card :is(img, video) {
+    height: auto !important;
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* Permitir que o conteúdo do card defina a altura naturalmente */
+  .class-card {
+    min-height: 0;
+  }
+
+  /* Evita espaço extra no final após remoção do botão */
+  .class-card div {
+    padding-bottom: 1rem;
+  }
+}
+
 /* Overrides finais para assegurar alinhamento e aplicação do acabamento 3D
    - uso de !important para garantir aplicação sem alterar demais regras existentes */
 .about-layout {
@@ -58,7 +78,7 @@
   transform: translate3d(0, var(--parallax-y, 0), 0) rotateX(1.6deg) rotateY(-0.8deg) !important;
 }
 
-.about-media-frame.is-fold-complete .about-photo {
+.about-media-frame.is-fold-complete .about-carousel {
   transform: translateZ(10px) scale(1.02) !important;
   box-shadow: 0 18px 38px rgba(23, 17, 14, 0.06) !important;
 }
@@ -144,8 +164,10 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 3px;
+  padding: 0;
   filter: saturate(1.02) contrast(1.05);
+  transform-origin: center;
+  transition: transform 160ms ease;
 }
 
 .site-header .brand-link strong {
@@ -384,6 +406,16 @@ button:focus-visible {
   background: var(--ares-text);
 }
 
+/* Desktop: aumentar levemente a arte interna do logo sem alterar o container */
+@media (min-width: 768px) {
+  .logo-mark img {
+    /* preencher melhor o quadrado mantendo centro da arte */
+    transform: scale(1.18);
+    object-fit: cover;
+    padding: 0;
+  }
+}
+
 .mobile-menu {
   display: none;
   border-top: 1px solid var(--color-border);
@@ -404,6 +436,130 @@ button:focus-visible {
 
 .mobile-actions .business-status {
   width: fit-content;
+}
+
+/* Mobile header tweaks: logo prominence, touch targets and layout */
+@media (max-width: 767px) {
+  .header-shell {
+    height: 64px;
+    gap: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .logo-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    border-width: 1px;
+  }
+
+  .logo-mark img {
+    width: 100%;
+    height: 100%;
+    /* A imagem original possui espaço interno — usar cover + scale leve para preencher sem cortar elementos importantes */
+    object-fit: cover;
+    display: block;
+    padding: 0;
+    transform-origin: center;
+    transform: scale(1.18);
+  }
+
+  .mobile-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .mobile-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.825rem;
+    line-height: 1;
+    color: var(--ares-text);
+    white-space: nowrap;
+  }
+
+  .mobile-status .business-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    flex: 0 0 8px;
+  }
+
+  .mobile-social-button {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 6px;
+    padding: 0;
+  }
+
+  .mobile-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .mobile-toggle span {
+    width: 16px;
+  }
+
+  /* Mobile per-card prepared/active states to animate each card when it enters */
+  /* Wrapper slot that stays stable in layout while the actual ARTICLE slides */
+  .class-card-slot {
+    display: block;
+    min-width: 0;
+  }
+
+  .classes-section {
+    overflow-x: clip;
+  }
+
+  .class-card-slot > [data-classes-card] {
+    opacity: 0;
+    transform: translate3d(calc(100vw + 24px), 0, 0);
+    will-change: opacity, transform;
+    transition: none;
+    transition-delay: 0ms !important;
+  }
+
+  .class-card-slot > [data-classes-card].is-card-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition:
+      opacity 650ms ease,
+      transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: 0ms !important;
+  }
+
+  /* Tighten spacing on very small screens to avoid overlap */
+  @media (max-width: 360px) {
+    .header-shell {
+      gap: 0.6rem;
+    }
+
+    .logo-mark {
+      width: 54px;
+      height: 54px;
+    }
+
+    .mobile-social-button,
+    .mobile-toggle {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .class-card-slot {
+    display: contents;
+  }
 }
 
 .hero-section {
@@ -807,6 +963,16 @@ html.hero-media-preparing .hero-media {
   align-self: center;
 }
 
+.about-copy .btn-secondary {
+  transition: border-color 220ms ease, background 220ms ease, color 220ms ease, transform 220ms ease;
+}
+
+.about-copy .btn-secondary:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+  color: var(--ares-ivory);
+}
+
 /* Ajustes visuais sutis para a seção "Sobre" (apenas apresentação)
    - Alinha verticalmente o bloco de imagem ao topo do conteúdo no desktop
    - Remove possível filete no topo (override mínimo da pseudo-border)
@@ -828,7 +994,7 @@ html.hero-media-preparing .hero-media {
   transform: translate3d(0, var(--parallax-y, 0), 0) rotateX(1.6deg) rotateY(-0.8deg);
 }
 
-.about-media-frame.is-fold-complete .about-photo {
+.about-media-frame.is-fold-complete .about-carousel {
   transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 900ms ease;
   transform: translateZ(10px) scale(1.02);
   box-shadow: 0 18px 38px rgba(23, 17, 14, 0.06);
@@ -848,6 +1014,20 @@ html.hero-media-preparing .hero-media {
     opacity 720ms cubic-bezier(0.16, 1, 0.3, 1) var(--about-delay, 0ms),
     filter 720ms cubic-bezier(0.16, 1, 0.3, 1) var(--about-delay, 0ms),
     transform 720ms cubic-bezier(0.16, 1, 0.3, 1) var(--about-delay, 0ms);
+}
+
+.about-layout.is-about-active .about-copy .btn-secondary {
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.about-layout.is-about-active .about-copy .btn-secondary:hover {
+  border-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+  color: var(--ares-ivory);
 }
 
 .about-title {
@@ -924,6 +1104,14 @@ html.hero-media-preparing .hero-media {
   transform-style: preserve-3d;
 }
 
+.about-carousel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  touch-action: pan-y;
+}
+
 .about-photo {
   display: block;
   width: 100%;
@@ -931,6 +1119,31 @@ html.hero-media-preparing .hero-media {
   object-fit: cover;
   object-position: 43% center;
   transition: opacity 260ms ease;
+}
+
+.about-carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.015);
+  transition:
+    opacity 1200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.about-carousel-slide:nth-of-type(2) {
+  object-position: 58% center;
+}
+
+.about-carousel-slide:nth-of-type(3) {
+  object-position: 50% center;
+}
+
+.about-carousel-slide.is-active {
+  z-index: 1;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .about-media-frame.is-fold-prepared:not(.is-fold-complete):not(.is-fold-fallback) .about-photo,
@@ -942,6 +1155,96 @@ html.hero-media-preparing .hero-media {
 .about-media-frame.is-fold-complete .about-photo,
 .about-media-frame.is-fold-fallback .about-photo {
   opacity: 1;
+}
+
+.about-media-frame.is-fold-complete .about-carousel-slide,
+.about-media-frame.is-fold-fallback .about-carousel-slide {
+  opacity: 0;
+}
+
+.about-media-frame.is-fold-complete .about-carousel-slide.is-active,
+.about-media-frame.is-fold-fallback .about-carousel-slide.is-active {
+  opacity: 1;
+}
+
+.about-carousel-controls {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 420ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.about-media-frame.is-carousel-ready .about-carousel-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.about-carousel-arrow,
+.about-carousel-dots button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--color-surface) 55%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+  color: var(--ares-text);
+  backdrop-filter: blur(10px);
+  transition: border-color 220ms ease, background 220ms ease, color 220ms ease, transform 220ms ease;
+}
+
+.about-carousel-arrow {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 999px;
+}
+
+.about-carousel-arrow svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.about-carousel-dots {
+  display: inline-flex;
+  gap: 0.34rem;
+  padding: 0.42rem 0.52rem;
+  border: 1px solid color-mix(in srgb, var(--color-surface) 50%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ares-text) 14%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.about-carousel-dots button {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-color: transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-surface) 68%, transparent);
+  padding: 0;
+}
+
+.about-carousel-dots button.is-active {
+  width: 1.05rem;
+  background: var(--color-surface);
+}
+
+.about-carousel-arrow:hover,
+.about-carousel-dots button:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 42%, transparent);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  transform: translateY(-1px);
 }
 
 .about-fold-slices {
@@ -1040,6 +1343,19 @@ html.hero-media-preparing .hero-media {
 .instructor-photo-placeholder {
   width: 100%;
   height: 100%;
+}
+.instructor-photo,
+.instructor-photo-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.instructor-photo {
+  display: block;
+  object-fit: cover;
+  object-position: center 35%;
+  /* image can keep internal 3D/scale visual effects but should not
+     control the entrance transform (wrapper does that) */
 }
 
 .instructor-photo {
@@ -1146,13 +1462,18 @@ html.hero-media-preparing .hero-media {
   text-transform: uppercase;
 }
 
-.instructor-layout.is-instructor-prepared [data-instructor-animate="photo"] {
-  clip-path: inset(100% 0 0 0);
+/* Ensure the reveal wrapper does not mask the photo with clip-path */
+.instructor-media-reveal {
+  width: 100%;
+  height: 100%;
+  clip-path: none;
 }
 
-.instructor-layout.is-instructor-prepared .instructor-photo,
-.instructor-layout.is-instructor-prepared .instructor-photo-placeholder {
-  transform: scale(1.04);
+/* Wrapper controls the entrance: positioned offscreen to the right initially */
+.instructor-layout.is-instructor-prepared [data-instructor-animate="photo"] {
+  opacity: 0;
+  transform: translate3d(120px, 0, 0);
+  will-change: opacity, transform;
 }
 
 .instructor-layout.is-instructor-prepared [data-instructor-animate="label"] {
@@ -1175,14 +1496,30 @@ html.hero-media-preparing .hero-media {
   transform: translateY(14px);
 }
 
+
 .instructor-layout.is-instructor-active [data-instructor-animate="photo"] {
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 980ms cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 700ms ease,
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* keep image internal scaling separate so it contributes only to visual depth
+   and do NOT apply any translate to the image itself */
+.instructor-layout.is-instructor-prepared .instructor-photo {
+  transform: scale(1.03);
+}
+
+.instructor-layout.is-instructor-active .instructor-photo {
+  transform: scale(1);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .instructor-layout.is-instructor-active .instructor-photo,
 .instructor-layout.is-instructor-active .instructor-photo-placeholder {
-  transform: scale(1);
+  /* final state: no vertical translation, horizontal at 0 and scale reset */
+  transform: translate3d(0, 0, 0) scale(1);
   transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1224,22 +1561,89 @@ html.hero-media-preparing .hero-media {
   width: min(100%, 34rem);
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin: 1.35rem auto 0;
+  gap: 1.15rem;
+  margin: 1.55rem auto 0;
   text-align: center;
 }
 
-.classes-offer-text {
-  color: var(--ares-text);
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.65rem, 3vw, 2.35rem);
-  font-weight: 600;
-  line-height: 1.05;
+.classes-title {
+  color: var(--color-primary);
+  font-size: clamp(2.45rem, 5vw, 4.1rem);
+  line-height: 0.92;
 }
 
-.classes-offer-text strong {
+.classes-offer-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.28rem 0.55rem;
+  color: var(--ares-text);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.2rem, 2.3vw, 1.65rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.classes-price-value {
   color: var(--ares-coffee);
+  font-size: clamp(2.1rem, 4.2vw, 3.35rem);
   font-weight: 700;
+}
+
+.classes-price-period {
+  color: var(--ares-muted);
+  font-size: clamp(1rem, 1.9vw, 1.28rem);
+}
+
+.classes-grid {
+  overflow-x: clip;
+}
+
+.classes-letter-line,
+.classes-letter-char {
+  display: inline-block;
+}
+
+.classes-letter-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+[data-classes-intro].is-classes-prepared [data-classes-letter] {
+  visibility: visible;
+}
+
+[data-classes-intro].is-classes-prepared .classes-letter-char {
+  opacity: 0;
+  transform: translate3d(0, -52px, 0);
+  will-change: opacity, transform;
+}
+
+[data-classes-intro].is-classes-complete .classes-letter-char {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+[data-classes-intro].is-classes-prepared [data-classes-card] {
+  opacity: 0;
+  transform: translate3d(54px, 0, 0);
+  will-change: opacity, transform;
+}
+
+[data-classes-intro].is-classes-active [data-classes-card] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 680ms ease var(--classes-card-delay, 0ms),
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1) var(--classes-card-delay, 0ms);
+}
+
+[data-classes-intro].is-classes-complete [data-classes-card] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
 }
 
 .class-card {
@@ -1267,6 +1671,24 @@ html.hero-media-preparing .hero-media {
 
   .class-card :is(img, video) {
     height: 194px;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-classes-intro].is-classes-prepared .classes-letter-char {
+    transform: translate3d(0, -36px, 0);
+  }
+
+  [data-classes-intro].is-classes-prepared [data-classes-card] {
+    transform: translate3d(64px, 0, 0);
+  }
+
+  [data-classes-intro].is-classes-complete [data-classes-card] {
+    transform: none;
+  }
+
+  .classes-price-value {
+    flex-basis: 100%;
   }
 }
 
@@ -1301,18 +1723,6 @@ html.hero-media-preparing .hero-media {
   line-height: 1.55;
 }
 
-.class-card a {
-  display: inline-flex;
-  align-self: center;
-  margin-top: auto;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 42%, transparent);
-  border-radius: 4px;
-  background: var(--color-primary);
-  padding: 0.45rem 0.8rem;
-  color: var(--ares-ivory);
-  font-size: 0.68rem;
-  font-weight: 700;
-}
 
 .testimonial-strip blockquote {
   display: flex;
@@ -1416,6 +1826,45 @@ html.hero-media-preparing .hero-media {
 
 .footer-socials a:hover {
   color: var(--color-primary);
+}
+
+.developer-signature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 72%, transparent);
+  color: color-mix(in srgb, var(--color-text-soft) 88%, transparent);
+}
+
+.developer-signature strong {
+  color: var(--ares-text);
+  font-weight: 600;
+}
+
+.developer-signature a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  min-height: 1.8rem;
+  color: color-mix(in srgb, var(--color-text-soft) 92%, transparent);
+  transition: color 220ms ease, transform 220ms ease;
+}
+
+.developer-signature a:hover {
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.developer-signature svg {
+  width: 0.92rem;
+  height: 0.92rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .reveal {
@@ -1581,7 +2030,7 @@ html.hero-media-preparing .hero-media {
   }
 
   .about-media-frame.is-fold-complete .about-media-parallax,
-  .about-media-frame.is-fold-complete .about-photo {
+  .about-media-frame.is-fold-complete .about-carousel {
     transform: none;
     box-shadow: none;
     transition: none;

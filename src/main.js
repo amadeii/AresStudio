@@ -120,6 +120,7 @@ const initReveal = () => {
   document.querySelectorAll(".reveal").forEach((element) => {
     // skip reveals that are controlled by the hero replay system
     if (element.closest('.hero-section') || element.dataset.heroControlled === 'true') return;
+    if (element.closest("[data-classes-intro]")) return;
     revealObserver.observe(element);
   });
 };
@@ -428,6 +429,131 @@ const afterPreparedPaint = () =>
     });
   });
 
+const setupAboutCarousel = (block) => {
+  if (block.dataset.aboutCarouselReady === "true") return;
+
+  const carousel = block.querySelector("[data-about-carousel]");
+  if (!carousel) return;
+
+  const slides = Array.from(carousel.querySelectorAll("[data-about-slide]"));
+  const dots = Array.from(carousel.querySelectorAll("[data-about-carousel-dot]"));
+  const previous = carousel.querySelector("[data-about-carousel-prev]");
+  const next = carousel.querySelector("[data-about-carousel-next]");
+  if (slides.length <= 1) return;
+
+  const autoplayDelay = 5000;
+  const swipeThreshold = 44;
+  let currentIndex = 0;
+  let autoplayTimer = null;
+  let carouselEnabled = false;
+  let pointerStartX = null;
+  let pointerStartY = null;
+
+  const updateSlides = (nextIndex) => {
+    currentIndex = (nextIndex + slides.length) % slides.length;
+    slides.forEach((slide, index) => {
+      slide.classList.toggle("is-active", index === currentIndex);
+    });
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("is-active", index === currentIndex);
+      dot.setAttribute("aria-current", index === currentIndex ? "true" : "false");
+    });
+  };
+
+  const clearAutoplay = () => {
+    window.clearTimeout(autoplayTimer);
+    autoplayTimer = null;
+  };
+
+  const scheduleAutoplay = () => {
+    clearAutoplay();
+    if (!carouselEnabled || document.hidden) return;
+
+    autoplayTimer = window.setTimeout(() => {
+      updateSlides(currentIndex + 1);
+      scheduleAutoplay();
+    }, autoplayDelay);
+  };
+
+  const restartAutoplay = () => {
+    if (!carouselEnabled) return;
+    scheduleAutoplay();
+  };
+
+  const goToSlide = (index) => {
+    updateSlides(index);
+    restartAutoplay();
+  };
+
+  previous?.addEventListener("click", () => goToSlide(currentIndex - 1));
+  next?.addEventListener("click", () => goToSlide(currentIndex + 1));
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => goToSlide(index));
+  });
+  carousel.querySelector(".about-carousel-dots")?.addEventListener("click", (event) => {
+    const dot =
+      event.target.closest("[data-about-carousel-dot]") ||
+      dots.reduce((closestDot, currentDot) => {
+        const rect = currentDot.getBoundingClientRect();
+        const center = rect.left + rect.width / 2;
+        const currentDistance = Math.abs(event.clientX - center);
+        const closestRect = closestDot.getBoundingClientRect();
+        const closestCenter = closestRect.left + closestRect.width / 2;
+        return currentDistance < Math.abs(event.clientX - closestCenter) ? currentDot : closestDot;
+      }, dots[0]);
+    if (!dot) return;
+    goToSlide(Number(dot.dataset.aboutCarouselDot || 0));
+  });
+
+  carousel.addEventListener("pointerdown", (event) => {
+    pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
+  });
+
+  carousel.addEventListener("pointerup", (event) => {
+    if (pointerStartX === null || pointerStartY === null) return;
+
+    const deltaX = event.clientX - pointerStartX;
+    const deltaY = event.clientY - pointerStartY;
+    pointerStartX = null;
+    pointerStartY = null;
+
+    if (Math.abs(deltaX) < swipeThreshold || Math.abs(deltaX) < Math.abs(deltaY)) return;
+    goToSlide(deltaX < 0 ? currentIndex + 1 : currentIndex - 1);
+  });
+
+  carousel.addEventListener("pointercancel", () => {
+    pointerStartX = null;
+    pointerStartY = null;
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (!carouselEnabled) return;
+    if (document.hidden) {
+      clearAutoplay();
+      return;
+    }
+    scheduleAutoplay();
+  });
+
+  block.startAboutCarousel = () => {
+    carouselEnabled = true;
+    block.classList.add("is-carousel-ready");
+    updateSlides(0);
+    scheduleAutoplay();
+  };
+
+  block.stopAboutCarousel = ({ reset = true } = {}) => {
+    carouselEnabled = false;
+    clearAutoplay();
+    block.classList.remove("is-carousel-ready");
+    if (reset) updateSlides(0);
+  };
+
+  block.dataset.aboutCarouselReady = "true";
+  updateSlides(0);
+};
+
 const initAboutImageFold = () => {
   const foldBlocks = document.querySelectorAll("[data-about-fold]");
   if (!foldBlocks.length) return;
@@ -440,10 +566,12 @@ const initAboutImageFold = () => {
     const image = block.querySelector(".about-photo");
     const revealLayer = block.querySelector(".about-media-reveal") || block;
     if (!image) return;
+    setupAboutCarousel(block);
     const imageReady =
       image.complete || !image.decode ? Promise.resolve() : image.decode().catch(() => null);
 
     const useFallback = () => {
+      block.stopAboutCarousel?.({ reset: true });
       block.classList.remove("is-fold-prepared", "is-fold-active");
       block.classList.add("is-fold-fallback");
       block.querySelector(".about-fold-slices")?.remove();
@@ -474,6 +602,7 @@ const initAboutImageFold = () => {
       const duration = window.innerWidth < 768 ? 1150 : 1350;
       const stagger = 70;
 
+      block.stopAboutCarousel?.({ reset: true });
       layer.className = "about-fold-slices";
       block.style.setProperty("--fold-slices", sliceCount);
       block.style.setProperty("--fold-width", width);
@@ -496,6 +625,7 @@ const initAboutImageFold = () => {
         slice.style.setProperty("--fold-duration", `${duration}ms`);
         sliceImage.alt = "";
         sliceImage.removeAttribute("class");
+        sliceImage.removeAttribute("data-about-slide");
         sliceImage.removeAttribute("loading");
         sliceImage.removeAttribute("decoding");
         sliceImage.setAttribute("aria-hidden", "true");
@@ -541,11 +671,13 @@ const initAboutImageFold = () => {
         block.classList.add("is-fold-complete");
         block.classList.remove("is-fold-prepared", "is-fold-active");
         window.setTimeout(() => block.querySelector(".about-fold-slices")?.remove(), 180);
+        block.startAboutCarousel?.();
       }, duration + (sliceCount - 1) * stagger + 140);
     };
 
     // allow clean reset from outside (called when section fully leaves viewport)
     block.resetAboutFold = () => {
+      block.stopAboutCarousel?.({ reset: true });
       block.classList.remove("is-fold-active", "is-fold-prepared", "is-fold-complete", "is-fold-fallback");
       block.querySelector(".about-fold-slices")?.remove();
       delete block.dataset.foldPrepared;
@@ -669,36 +801,299 @@ const initInstructorIntro = () => {
     });
     block.classList.add("is-instructor-prepared");
     block.getBoundingClientRect();
-    const trigger = block.querySelector(".instructor-media-frame") || block;
+    // observe a stable element in layout (not the transformed wrapper)
+    const trigger = block.querySelector(".instructor-media-shell") || block;
 
     afterPreparedPaint().then(() => {
-      const isCompletelyOutside = (entry) => {
-        const rect = entry.boundingClientRect;
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        return rect.bottom < 0 || rect.top > vh;
-      };
-
       const instructorObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (!trigger.dataset.replayArmed) trigger.dataset.replayArmed = "true";
-
-            if (entry.isIntersecting && trigger.dataset.replayArmed === "true") {
-              trigger.dataset.replayArmed = "false";
-              block.classList.add("is-instructor-active");
+            if (!trigger.dataset.replayArmed) {
+              trigger.dataset.replayArmed = "true";
             }
 
-            if (!entry.isIntersecting && isCompletelyOutside(entry)) {
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= 0.12 &&
+              trigger.dataset.replayArmed === "true"
+            ) {
+              trigger.dataset.replayArmed = "false";
+
+              block.classList.remove("is-instructor-active");
+              block.getBoundingClientRect();
+
+              requestAnimationFrame(() => {
+                block.classList.add("is-instructor-active");
+              });
+            }
+
+            if (!entry.isIntersecting) {
               trigger.dataset.replayArmed = "true";
               block.classList.remove("is-instructor-active");
             }
           });
         },
-        { threshold: 0.04, rootMargin: "0px 0px -25% 0px" },
+        { threshold: [0, 0.12], rootMargin: "0px" },
       );
 
       instructorObserver.observe(trigger);
     });
+  });
+};
+
+const initClassesSectionIntro = () => {
+  const section = document.querySelector("[data-classes-intro]");
+  if (!section) return;
+
+  const letterTargets = Array.from(section.querySelectorAll("[data-classes-letter]"));
+  const cards = Array.from(section.querySelectorAll("[data-classes-card]"));
+  const startY = window.innerWidth < 768 ? -36 : -52;
+  const letterDuration = prefersReducedMotion ? 360 : 540;
+  const letterStagger = prefersReducedMotion ? 18 : 34;
+  const letterEasing = "cubic-bezier(0.16, 1, 0.3, 1)";
+  const cardDuration = prefersReducedMotion ? 1 : 760;
+  const cardStagger = prefersReducedMotion ? 0 : 120;
+  const cardDelay = prefersReducedMotion ? 0 : 460;
+  let letterAnimations = [];
+  let resetTimer = null;
+
+  const createChar = (char, index) => {
+    if (char === " ") {
+      const space = document.createElement("span");
+      space.className = "classes-letter-space";
+      space.setAttribute("aria-hidden", "true");
+      return space;
+    }
+
+    const span = document.createElement("span");
+    span.className = "classes-letter-char";
+    span.setAttribute("aria-hidden", "true");
+    span.style.setProperty("--classes-char-index", index);
+    span.style.opacity = "0";
+    span.style.transform = `translate3d(0, ${startY}px, 0)`;
+    span.textContent = char;
+    return span;
+  };
+
+  const prepareTextNode = (node, getIndex) => {
+    const text = (node.textContent || "").replace(/\s+/g, " ").trim();
+    if (!text) {
+      node.remove();
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    [...text].forEach((char) => {
+      fragment.appendChild(createChar(char, getIndex()));
+    });
+    node.replaceWith(fragment);
+  };
+
+  letterTargets.forEach((target, targetIndex) => {
+    if (target.dataset.classesLetterPrepared === "true") return;
+
+    const label = target.getAttribute("aria-label") || target.textContent.trim().replace(/\s+/g, " ");
+    let charIndex = 0;
+    const getIndex = () => charIndex++;
+
+    target.dataset.classesLetterPrepared = "true";
+    target.dataset.classesLetterIndex = String(targetIndex);
+    target.setAttribute("aria-label", label);
+
+    Array.from(target.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        prepareTextNode(node, getIndex);
+        return;
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        node.setAttribute("aria-hidden", "true");
+        Array.from(node.childNodes).forEach((child) => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            prepareTextNode(child, getIndex);
+          }
+        });
+      }
+    });
+  });
+
+  const isDesktopClasses = window.innerWidth >= 768;
+
+  cards.forEach((card, index) => {
+    if (isDesktopClasses) {
+      const delayMs = `${cardDelay + index * cardStagger}ms`;
+      card.style.setProperty("--classes-card-delay", delayMs);
+      card.style.transitionDelay = delayMs;
+    } else {
+      card.style.removeProperty("--classes-card-delay");
+      card.style.transitionDelay = "0ms";
+    }
+  });
+
+  const chars = Array.from(section.querySelectorAll(".classes-letter-char"));
+
+  const resetSection = () => {
+    window.clearTimeout(resetTimer);
+    letterAnimations.forEach((animation) => animation.cancel());
+    letterAnimations = [];
+    chars.forEach((char) => {
+      char.style.opacity = "0";
+      char.style.transform = `translate3d(0, ${startY}px, 0)`;
+    });
+    section.classList.remove("is-classes-active", "is-classes-complete");
+    section.classList.add("is-classes-prepared");
+    section.dataset.classesPlaying = "false";
+    section.dataset.classesArmed = "true";
+  };
+
+  const completeSection = () => {
+    chars.forEach((char) => {
+      char.style.opacity = "1";
+      char.style.transform = "none";
+      char.getAnimations?.().forEach((animation) => animation.cancel());
+    });
+    section.classList.add("is-classes-complete");
+    section.dataset.classesPlaying = "false";
+  };
+
+  const playSection = () => {
+    if (section.dataset.classesPlaying === "true") return;
+
+    section.dataset.classesPlaying = "true";
+    section.dataset.classesArmed = "false";
+    section.classList.add("is-classes-active");
+    section.classList.remove("is-classes-complete");
+
+    if (!Element.prototype.animate || prefersReducedMotion) {
+      completeSection();
+      return;
+    }
+
+    letterAnimations = letterTargets.flatMap((target, targetIndex) => {
+      const targetDelay = targetIndex * 230;
+      return Array.from(target.querySelectorAll(".classes-letter-char")).map((char, index) =>
+        char.animate(
+          [
+            { opacity: 0, transform: `translate3d(0, ${startY}px, 0)` },
+            { opacity: 1, transform: "translate3d(0, 0, 0)" },
+          ],
+          {
+            delay: targetDelay + index * letterStagger,
+            duration: letterDuration,
+            easing: letterEasing,
+            fill: "both",
+          },
+        ),
+      );
+    });
+
+    const cardTotal = cardDelay + Math.max(0, cards.length - 1) * cardStagger + cardDuration;
+    const letterTotal =
+      Math.max(
+        0,
+        ...letterTargets.map((target, targetIndex) => targetIndex * 230 + target.querySelectorAll(".classes-letter-char").length * letterStagger + letterDuration),
+      );
+
+    Promise.allSettled(letterAnimations.map((animation) => animation.finished)).then(() => {
+      if (section.dataset.classesPlaying === "true") {
+        completeSection();
+      }
+    });
+
+    resetTimer = window.setTimeout(completeSection, Math.max(cardTotal, letterTotal) + 120);
+  };
+
+  const isCompletelyOutside = (entry) => {
+    const rect = entry.boundingClientRect;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    return rect.bottom < 0 || rect.top > vh;
+  };
+
+  section.dataset.classesArmed = "true";
+  section.classList.add("is-classes-prepared");
+  section.getBoundingClientRect();
+
+  if (prefersReducedMotion) {
+    playSection();
+    return;
+  }
+
+  afterPreparedPaint().then(() => {
+    const trigger = section.querySelector('.classes-grid') || section;
+
+    // Desktop behavior: observe the grid and play the full staggered section
+    if (window.innerWidth >= 768) {
+      const classesObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= 0.12 &&
+              section.dataset.classesArmed === "true"
+            ) {
+              playSection();
+            }
+
+            if (!entry.isIntersecting) {
+              resetSection();
+            }
+          });
+        },
+        { threshold: [0, 0.12], rootMargin: "0px" },
+      );
+
+      classesObserver.observe(trigger);
+    } else {
+      // Mobile: observe each SLOT so the transformed card remains observable
+      const cardObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const slot = entry.target;
+            const card = slot.querySelector("[data-classes-card]");
+            if (!card) return;
+
+            if (!card.dataset.cardArmed) {
+              card.dataset.cardArmed = "true";
+            }
+
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= 0.12 &&
+              card.dataset.cardArmed === "true"
+            ) {
+              card.dataset.cardArmed = "false";
+
+              // garantir que o browser tenha o estado inicial aplicado
+              card.classList.remove("is-card-active");
+              card.getBoundingClientRect();
+
+              requestAnimationFrame(() => {
+                card.classList.add("is-card-active");
+              });
+            }
+
+            if (!entry.isIntersecting) {
+              card.dataset.cardArmed = "true";
+              card.classList.remove("is-card-active");
+            }
+          });
+        },
+        { threshold: [0, 0.12], rootMargin: "0px" },
+      );
+
+      const cardSlots = Array.from(
+        section.querySelectorAll("[data-classes-card-trigger]")
+      );
+
+      cardSlots.forEach((slot) => {
+        const card = slot.querySelector("[data-classes-card]");
+        if (!card) return;
+
+        card.dataset.cardArmed = "true";
+        card.classList.remove("is-card-active");
+        cardObserver.observe(slot);
+      });
+    }
   });
 };
 
@@ -965,6 +1360,9 @@ initScrollEffects();
 initAboutImageFold();
 initAboutSectionIntro();
 initInstructorIntro();
+initClassesSectionIntro();
 initViewportVideos();
+// remove temporary preparing class for classes animations (first-paint protection)
+document.documentElement.classList.remove("classes-animations-preparing");
 document.documentElement.classList.remove("about-animations-preparing");
 initHeroCarousel();
