@@ -128,18 +128,11 @@ const initReveal = () => {
 const initHeroReplay = () => {
   const hero = document.querySelector('.hero-section');
   const title = document.querySelector('.hero-title');
-  const heroMedia = document.querySelector('.hero-media');
   if (!hero || !title) return;
 
   // ensure hero-managed reveals are not handled by generic reveal observer
   // mark hero children to be skipped by initReveal
   hero.querySelectorAll('.reveal').forEach(el => el.dataset.heroControlled = 'true');
-
-  const isCompletelyOutside = (entry) => {
-    const rect = entry.boundingClientRect;
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    return rect.bottom < 0 || rect.top > vh;
-  };
 
   // ensure play/reset helpers exist
   if (typeof title.playLetterDrop !== 'function' || typeof title.resetLetterDrop !== 'function') {
@@ -152,34 +145,17 @@ const initHeroReplay = () => {
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && hero.dataset.replayArmed === 'true') {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.3 && hero.dataset.replayArmed === 'true') {
         hero.dataset.replayArmed = 'false';
-        // play letter drop and hero media reveal
         try { title.playLetterDrop?.(); } catch (e) {}
-        try { if (heroMedia) { /* start hero media reveal if exists */
-            // reuse existing function startHeroMediaReveal by toggling dataset and letting initHeroTitleLetterDrop handle it
-            heroMedia.dataset.heroMediaRevealStarted = undefined;
-            // ensure clipPath set to initial state before play
-            heroMedia.classList.remove('is-hero-media-revealed','is-hero-media-revealing');
-            title.playLetterDrop?.();
-          }} catch (e) {}
       }
 
-      if (!entry.isIntersecting && isCompletelyOutside(entry)) {
-        // reset hero when completely out
+      if (entry.intersectionRatio <= 0.02 && hero.dataset.replayArmed === 'false') {
         hero.dataset.replayArmed = 'true';
         try { title.resetLetterDrop?.(); } catch (e) {}
-        try {
-          if (heroMedia) {
-            heroMedia.getAnimations?.().forEach(a => a.cancel());
-            heroMedia.classList.remove('is-hero-media-revealed','is-hero-media-revealing');
-            heroMedia.style.clipPath = '';
-            delete heroMedia.dataset.heroMediaRevealStarted;
-          }
-        } catch (e) {}
       }
     });
-  }, { threshold: 0.04, rootMargin: '0px 0px -0% 0px' });
+  }, { threshold: [0, 0.02, 0.3], rootMargin: '0px' });
 
   observer.observe(hero);
 };
@@ -378,7 +354,7 @@ const initHeroTitleLetterDrop = () => {
     if (heroMedia) {
       heroMedia.getAnimations?.().forEach((a) => a.cancel());
       heroMedia.classList.remove("is-hero-media-revealed", "is-hero-media-revealing");
-      heroMedia.style.clipPath = "";
+      heroMedia.style.clipPath = "inset(0 100% 0 0)";
       delete heroMedia.dataset.heroMediaRevealStarted;
     }
   };
@@ -1063,13 +1039,8 @@ const initClassesSectionIntro = () => {
             ) {
               card.dataset.cardArmed = "false";
 
-              // garantir que o browser tenha o estado inicial aplicado
               card.classList.remove("is-card-active");
-              card.getBoundingClientRect();
-
-              requestAnimationFrame(() => {
-                card.classList.add("is-card-active");
-              });
+              card.classList.add("is-card-active");
             }
 
             if (!entry.isIntersecting) {

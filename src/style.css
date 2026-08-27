@@ -617,7 +617,7 @@ button:focus-visible {
     transition-delay: 0ms !important;
   }
 
-  .class-card-slot > [data-classes-card].is-card-active {
+  [data-classes-intro].is-classes-prepared .class-card-slot > [data-classes-card].is-card-active {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     transition:
