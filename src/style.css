@@ -331,7 +331,7 @@ button:focus-visible {
   min-height: 42px;
   gap: 0.45rem;
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: 6px;
   padding: 0.72rem 1rem;
   font-size: 0.78rem;
   font-weight: 700;
@@ -1891,7 +1891,7 @@ html.hero-media-preparing .hero-media {
   bottom: 1rem;
   z-index: 2;
   border: 1px solid color-mix(in srgb, var(--color-border-strong) 42%, transparent);
-  border-radius: 4px;
+  border-radius: 6px;
   background: color-mix(in srgb, var(--color-surface) 92%, transparent);
   padding: 0.62rem 0.82rem;
   color: var(--ares-coffee);
