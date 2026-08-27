@@ -167,8 +167,10 @@ button:focus-visible {
 }
 
 .brand-link {
+  display: inline-flex;
   min-width: 0;
-  flex: 1 1 auto;
+  width: fit-content;
+  flex: 0 0 auto;
 }
 
 .header-actions {
@@ -186,7 +188,6 @@ button:focus-visible {
 }
 
 .brand-link {
-  display: flex;
   align-items: center;
   min-width: 0;
   gap: 0.78rem;
